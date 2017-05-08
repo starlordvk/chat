@@ -5,10 +5,23 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+var index = require('./routes/index.js');
+var users = require('./routes/users.js');
 
 var app = express();
+
+//connecting to the DB
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://varun:varun@ds133961.mlab.com:33961/chatvk');
+
+var db = mongoose.connection;
+db.on('error',()=>{
+    console.log('Error connecting to DB');
+    console.error.bind(console, 'connection error:');
+    // TODO: remove this
+    process.exit();
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
