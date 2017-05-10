@@ -4,7 +4,8 @@ var User= require('../databases/Users.js');
 
 
 /* GET users listing. */
-router.post('/', register);
+
+router.post('/', [isLogin,register]);
 
 function register(req,res){
 	var user = new User(req.body);
@@ -14,4 +15,27 @@ function register(req,res){
 		res.status(200).send(user);
 	});
 }
+
+function isLogin(req,res,next)
+{
+User.findOne({'email':req.body.email},(err,doc)=>{
+		if(err)
+		{
+			throw err;
+		}
+		if(!doc)
+		{
+			next();
+		}
+		else
+		{
+			console.log("Logging you in..");
+			res.status(200).send(doc);
+		}
+		
+	});
+}
 module.exports = router;
+
+
+
